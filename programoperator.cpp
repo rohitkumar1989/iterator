@@ -33,52 +33,46 @@ class stack{
 		}
 		
 	}
-	stackiter* createtraversal();
+
 
 };
 
 class stackiter{
-    const	stack* stck;
+    const	stack &stck;
 	int index=0;
 	public:
-    stackiter(stack* stck):stck(stck){
-        
-    }
-	void first(){
-		index=0;
+	stackiter(stack &stck):stck(stck){
+	    
 	}
-	void next(){
+	void operator ++ (int){
 		index++;
 	}
 	
-	bool isdone(){
-		return index==stck->sp+1;
+	bool operator () (){
+		return index==(stck.sp)+1;
 	}
 	
-	int currentitem(){
-		return stck->st[index];
+	int operator *(){
+		return stck.st[index];
 	}
 }; 
 
 bool operator == (stack &st1,stack &st2){
 	
-	stackiter *it1=st1.createtraversal(), *it2=st2.createtraversal();
+	stackiter it1(st1), it2(st2);
 	
-	for(it1->first(),it2->first();!it1->isdone()&&!it2->isdone();it1->next(),it2->next()){
-		if(it1->currentitem()!=it2->currentitem()){
+	for(;!it1()&&!it2();it1++,it2++){
+		if(*it1!=*it2){
 		  return 0;
 		}
 		
 	}
 	
-	bool ans = it1->isdone()&&it2->isdone();
-	delete it1;
-	delete it2;
+	bool ans = it1()&&it2();
+
 	return ans;
 }
-stackiter* stack::createtraversal(){
-		return new stackiter(this);
-	}
+
 
 int main(){
 	
@@ -87,7 +81,7 @@ int main(){
 	s2.push(5);
 	s1.push(5);
 	s1.push(6);
-	s1.pop();
+	//s1.pop();
 	s2.push(5);
 	if(s1==s2){
 		cout<<"same";
